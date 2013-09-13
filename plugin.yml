@@ -1,0 +1,6 @@
+name: LinLevels
+version: 1.0
+description: Custom level plugin
+
+main: me.jacklin213.linlevels.LinLevels
+author: jacklin213
