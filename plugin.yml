@@ -4,3 +4,7 @@ description: Custom level plugin
 
 main: me.jacklin213.linlevels.LinLevels
 author: jacklin213
+
+commands:
+  linlevels:
+    description: Main command
