@@ -15,6 +15,8 @@ public class ConfigHandler {
 	private String pluginFolder;
 	private String playerFolder = "plugins" + File.separator + "LinLevels" + File.separator + "players";
 	private String pluginName;
+	private String infoColor;
+	public boolean RELOAD = false;
 	
 	//Constructors
 	public ConfigHandler(LinLevels instance){
@@ -26,6 +28,7 @@ public class ConfigHandler {
 		createPlayerFolder();
 		setConfig(config);
 		setPluginName();
+		setInfoColor();
 	}
 	
 	//Methods
@@ -74,6 +77,30 @@ public class ConfigHandler {
 	}
 	
 	public YamlConfiguration getPlayerConfig(String playerName){
+		 File playerFile = new File(playerFolder + File.separator + playerName.toLowerCase() + ".yml");
+		 if (!playerFile.exists()) {
+			 plugin.log.warning("Player file: " + playerName.toLowerCase() + ".yml does not exist.");
+			 RELOAD = false;
+			 return null;
+		 }
+		 YamlConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
+		 RELOAD = true;
+		 return playerConfig;
+	}
+	
+	public YamlConfiguration reloadPlayerConfig(String playerName){
+		File playerFile = new File(getPlayerFolder() + File.separator + playerName.toLowerCase() + ".yml");
+		if (!playerFile.exists()) {
+			plugin.log.warning("Player file: " + playerName.toLowerCase() + ".yml does not exist.");
+			RELOAD = false;
+			return null;
+		}
+		YamlConfiguration playerConfig  = YamlConfiguration.loadConfiguration(playerFile);
+		RELOAD = true;
+		return playerConfig;
+	}
+	
+	/*public YamlConfiguration getPlayerConfig(String playerName){
 		 File file = new File(playerFolder + File.separator + playerName.toLowerCase() + ".yml");
 		 if (!file.exists()) {
 			 try {
@@ -86,20 +113,12 @@ public class ConfigHandler {
 		 }
 		 YamlConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
 		 return playerConfig;
-	}
+	}*/
 	
-	public YamlConfiguration reloadPlayerConfig(String playerName){
-		File playerFile = new File(getPlayerFolder() + File.separator + playerName.toLowerCase() + ".yml");
-		if (!playerFile.exists()) {
-			plugin.log.warning("Player file: " + playerName.toLowerCase() + ".yml does not exist.");
-		}
-		YamlConfiguration playerConfig  = YamlConfiguration.loadConfiguration(playerFile);
-		return playerConfig;
-	}
-	
-	public void savePlayerConfig(String playerName){
+	public void savePlayerConfig(String playerName, YamlConfiguration playerConfig){
 		try{
-			getPlayerConfig(playerName).save(new File(getPlayerFolder(), playerName.toLowerCase() + ".yml"));
+			playerConfig.save(new File(getPlayerFolder(), playerName.toLowerCase() + ".yml"));
+			plugin.getLogger().info("Player config: " + playerName.toLowerCase() + ".yml has been saved");
 		} catch (Exception ex){ 
 			plugin.getLogger().severe("Could not save player config: " + playerName.toLowerCase());
 		}
@@ -115,10 +134,6 @@ public class ConfigHandler {
 		return config;
 	}
 
-	public void setConfig(FileConfiguration config) {
-		this.config = config;
-	}
-
 	public File getConfigFile() {
 		return configFile;
 	}
@@ -126,10 +141,42 @@ public class ConfigHandler {
 	public String getPluginName() {
 		return pluginName;
 	}
+	
+	public String getInfoColor(){
+		return infoColor;
+	}
+	
+	public String getPlayerStats(String name){
+		YamlConfiguration playerConfig = getPlayerConfig(name);
+		if (RELOAD == true){
+			String playerName = playerConfig.getString("Name");
+			String playerLv = playerConfig.getString("Level");
+			String playerXP = playerConfig.getString("XP");
+			String stats = 
+					ChatColor.DARK_PURPLE + "Name: " 
+					+ ChatColor.GREEN + playerName + "\n" +
+					ChatColor.DARK_PURPLE + "Level: "
+					+ ChatColor.GREEN + playerLv + "\n" +
+					ChatColor.DARK_PURPLE + "XP: "
+					+ ChatColor.GREEN + playerXP + " " 
+					;
+			return stats;
+		}
+		return ChatColor.RED + "Player does not exist!";
+	}
+	
+	public void setConfig(FileConfiguration config) {
+		this.config = config;
+	}
+	
+	public void setInfoColor(){
+		String infoColor = ChatColor.translateAlternateColorCodes('&', config.getString("Format.Message.info"));
+		this.infoColor = infoColor;
+	}
 
 	public void setPluginName() {
 		String pluginName = ChatColor.translateAlternateColorCodes('&', config.getString("Format.PluginName"));
 		this.pluginName = pluginName;
 	}
-
+	
 }

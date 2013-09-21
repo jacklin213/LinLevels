@@ -18,4 +18,8 @@ public String pluginName;
 		}
 	}
 	
+	public void commandConsoleReply(String message){
+		LL.getLogger().info(message);
+	}
+	
 }

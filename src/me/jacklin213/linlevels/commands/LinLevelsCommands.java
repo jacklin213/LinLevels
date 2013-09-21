@@ -19,9 +19,18 @@ public class LinLevelsCommands implements CommandExecutor{
 		if (commandLabel.equalsIgnoreCase("linlevels")){
 			if (args.length == 0){
 				LL.MSG.commandReply(sender.getName(), "Command Under Constuction");
+				return true;
 			}
 			if (args[0].equalsIgnoreCase("reload")){
-				new CommandReload(sender, args, "linlevels.reload");
+				/*new CommandReload(sender, args, "linlevels.reload");*/
+				LL.cmdReload.start(sender, args, "linlevels.reload");
+				LL.getLogger().info("Reload called");
+			}
+			if (args[0].equalsIgnoreCase("stats")){
+				LL.cmdStats.start(sender, args, "");
+			}
+			if(args[0].equalsIgnoreCase("set")){
+				LL.cmdSet.start(sender, args, "linlevels.set");
 			}
 		}
 		return false;

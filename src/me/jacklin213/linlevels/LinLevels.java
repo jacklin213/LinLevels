@@ -3,6 +3,8 @@ package me.jacklin213.linlevels;
 import java.util.logging.Logger;
 
 import me.jacklin213.linlevels.commands.CommandReload;
+import me.jacklin213.linlevels.commands.CommandSet;
+import me.jacklin213.linlevels.commands.CommandStats;
 import me.jacklin213.linlevels.commands.LinLevelsCommands;
 
 import org.bukkit.plugin.PluginManager;
@@ -19,6 +21,8 @@ public class LinLevels extends JavaPlugin{
 	
 	//Command classes
 	public CommandReload cmdReload = new CommandReload(this);
+	public CommandStats cmdStats = new CommandStats(this);
+	public CommandSet cmdSet = new CommandSet(this);
 	
 	@Override
 	public void onEnable() {

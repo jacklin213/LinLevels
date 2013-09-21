@@ -23,7 +23,7 @@ public class PlayerListener implements Listener{
 	@EventHandler
 	public void onLeave(PlayerQuitEvent event){
 		Player player = event.getPlayer();
-		plugin.configHandler.savePlayerConfig(player.getName());
+		plugin.configHandler.savePlayerConfig(player.getName(), plugin.configHandler.getPlayerConfig(player.getName()));
 	}
 	
 }

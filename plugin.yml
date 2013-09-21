@@ -8,3 +8,11 @@ author: jacklin213
 commands:
   linlevels:
     description: Main command
+    
+permissions:
+  linlevel.reload:
+    default: op
+    description: Allows config reload
+  linlevel.set:
+    default: op
+    description: Allows Player config editing
